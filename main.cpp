@@ -11,17 +11,38 @@ struct macchina{
 string found_car[100];
 int c = 0;
 
+int seleziona_auto(){
+    int id = 0;
+    for(int i=0; i<c; i++)
+        cout<<"ID ["<<i<<"] "<<found_car[i]<<endl;
+
+    do{
+    cout<<endl<<"Inserisci l'id della macchina: ";
+    cin>>id;
+    }while(id<=0 || id>=c);
+
+    char con;
+    do{
+    cout<<"Hai selezionato "<<found_car[id]<<endl;
+    cout<<"Conferma [C]"<<endl<<"Torna indietro [e]"<<endl<<">>";
+    }while(con !='C' || con != 'e');
+
+    if(con == 'e')
+        seleziona_auto();
+
+}
+
 void cerca_auto(macchina car){
     ifstream fin("auto.csv", ios::in);
     if(!fin)
     cout<<"Errore di apertura del file";
 
-    cout<<"Inserisci la categoria dell'auto: ";
-    cin>>car.categoria;
-
     c = 0;
     string cat, app, res;
     char v = ',';
+
+    cout<<"Inserisci la categoria dell'auto: ";
+    cin>>car.categoria;
 
     while(!fin.eof()){
         fin>>cat;
@@ -32,6 +53,19 @@ void cerca_auto(macchina car){
             found_car[c] = res;
             c++;
         }
+    }
+
+    //seleziona_auto();
+
+    for(int i=0; i<c; i++){
+        int x = 0;
+        int cv = 0;
+        do{
+           if(found_car[i][x] == ",")
+            cv++;
+            x++;
+        }while(cv != 4);
+
     }
     fin.close();
 }
