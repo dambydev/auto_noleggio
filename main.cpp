@@ -1,11 +1,12 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <algorithm>
 using namespace std;
 
 struct macchina{
     string categoria, marca, modello, colore;
-    char lun, mar, mer, gio, ven, sab, dom;
+    char week[7];
 };
 
 string found_car[100];
@@ -19,17 +20,157 @@ int seleziona_auto(){
     do{
     cout<<endl<<"Inserisci l'id della macchina: ";
     cin>>id;
-    }while(id<=0 || id>=c);
+    }while(id<0 || id>=c);
 
     char con;
+    bool c = false;
     do{
     cout<<"Hai selezionato "<<found_car[id]<<endl;
     cout<<"Conferma [C]"<<endl<<"Torna indietro [e]"<<endl<<">>";
-    }while(con !='C' || con != 'e');
+    cin>>con;
+    if(con != 'C'){
+        if(con != 'e')
+            c = true;
+        else
+            c = false;
+    }
+    else
+        c = false;
+    }while(c==true);
 
     if(con == 'e')
         seleziona_auto();
+    else{
+        return id;
+    }
+}
 
+void affitta(macchina *car, int id, int x){
+    bool pv = false, cg = false;
+    int ris = 0, conta_gd = 0;
+    int gd[7];
+    cout<<"Questi sono i giorni disponibili: "<<endl;
+    do{
+        for(int i=1; i<8; i++){
+            switch(i){
+                case 1:
+                    if(car->week[i-1]=='L'){
+                        cout<<"["<<i<<"]"<<"Lunedi'"<<endl;
+                    }
+                break;
+                case 2:
+                    if(car->week[i-1]=='L'){
+                        cout<<"["<<i<<"]"<<"Martedi'"<<endl;
+                    }
+                break;
+                case 3:
+                    if(car->week[i-1]=='L'){
+                        cout<<"["<<i<<"]"<<"Mercoledi'"<<endl;
+                    }
+                break;
+                case 4:
+                    if(car->week[i-1]=='L'){
+                        cout<<"["<<i<<"]"<<"Giovedi'"<<endl;
+                    }
+                break;
+                case 5:
+                    if(car->week[i-1]=='L'){
+                        cout<<"["<<i<<"]"<<"Venerdi'"<<endl;
+                    }
+                break;
+                case 6:
+                    if(car->week[i-1]=='L'){
+                        cout<<"["<<i<<"]"<<"Sabato"<<endl;
+                    }
+                break;
+                case 7:
+                    if(car->week[i-1]=='L'){
+                        cout<<"["<<i<<"]"<<"Domenica"<<endl;
+                    }
+                break;
+                default:
+                    cout<<"Errore"<<endl;
+            }
+        }
+
+            if(pv == false){
+                cout<<"Quali giorno/i vuoi affittare?";
+                pv = true;
+            }
+            else
+                cout<<endl;
+
+            cout<<endl<<"Inserire 9 per uscire";
+            cout<<endl<<">> ";
+            cin>>ris;
+            if(ris == 9)
+                cg = true;
+
+                if(cg == false){
+
+                bool cgd = false;
+                for(int i=0; i<conta_gd; i++){
+                    if(ris == car->week[i])
+                        cgd = true;
+                    else
+                        cgd = false;
+                }
+
+                if(cgd == false){
+                    switch(ris){
+                        case 1:
+                            car->week[ris-1] = 'A';
+                            gd[conta_gd] = ris;
+                            conta_gd++;
+                        break;
+
+                        case 2:
+                            car->week[ris-1] = 'A';
+                            gd[conta_gd] = ris;
+                            conta_gd++;
+                        break;
+
+                        case 3:
+                            car->week[ris-1] = 'A';
+                            gd[conta_gd] = ris;
+                            conta_gd++;
+                        break;
+
+                        case 4:
+                            car->week[ris-1] = 'A';
+                            gd[conta_gd] = ris;
+                            conta_gd++;
+                        break;
+
+                        case 5:
+                            car->week[ris-1] = 'A';
+                            gd[conta_gd] = ris;
+                            conta_gd++;
+                        break;
+
+                        case 6:
+                            car->week[ris-1] = 'A';
+                            gd[conta_gd] = ris;
+                            conta_gd++;
+                        break;
+
+                        case 7:
+                            car->week[ris-1] = 'A';
+                            gd[conta_gd] = ris;
+                            conta_gd++;
+                        break;
+                    }
+                }
+                else
+                    cout<<"Hai inserito un giorno gia' prenotato"<<endl;
+            }
+        }while(cg == false);
+
+        for(int i=0; i<7; i++)
+        {
+        found_car[id][x] = car->week[i];
+        x+=3;
+        }
 }
 
 void cerca_auto(macchina car){
@@ -55,18 +196,27 @@ void cerca_auto(macchina car){
         }
     }
 
-    //seleziona_auto();
+    int id = seleziona_auto();
+    int cv = 0;
+    int x = 0;
+    do{
 
-    for(int i=0; i<c; i++){
-        int x = 0;
-        int cv = 0;
-        do{
-           if(found_car[i][x] == ",")
-            cv++;
+       if(found_car[id][x] == ','){
+         cv++;
+         }
+       if(cv == 4){
             x++;
-        }while(cv != 4);
+        }
+         x++;
+    }while(cv != 4);
 
+    for(int i=0; i<7; i++)
+    {
+        car.week[i] = found_car[id][x];
+        x+=3;
     }
+    x = x-21;
+    affitta(&car, id, x);
     fin.close();
 }
 
