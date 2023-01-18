@@ -173,6 +173,33 @@ void affitta(macchina *car, int id, int x){
         }
 }
 
+void aggiorna_file(macchina *car, int id, int x){
+    ofstream fout("auto.csv", ios::out);
+    ifstream fin("auto.csv");
+    string line;
+    int c = 0;
+    if(fout.good()){
+            for(int i=0; i<id; i++){
+                getline(fin, line);
+                    if(i == id-1)
+                        fout<<found_car[id][x];
+            }
+    }
+    else
+        cout<<"Errore del file in lettura";
+    fin.close();
+
+}
+
+/*
+utilitaria, FIAT, Panda, rosso, L, L, L, A, A, A, A
+utilitaria, KIA, Pikanto, bronzo, A, A, L, L, L, A, A
+lusso, Mercedes, Classe 5, nero, L, L, L, L, L, A, A
+sportiva, Lamborghini, Huracan, giallo, L, L, L, L, L, L, L
+furgone, Ford, Transit, bianco, A, A, A, A, A, L, L
+lusso, BMW, Serie 5, grigio metallizzato, L, L, L, L, L, A, A
+utilitaria, Peugeot, 108, verde, L, A, L, L, L, A, L
+*/
 void cerca_auto(macchina car){
     ifstream fin("auto.csv", ios::in);
     if(!fin)
@@ -217,10 +244,8 @@ void cerca_auto(macchina car){
     }
     x = x-21;
     affitta(&car, id, x);
+    aggiorna_file(&car, id, x);
     fin.close();
-}
-
-void stampa_file(){
 }
 
 void menu(macchina car)
@@ -229,7 +254,7 @@ void menu(macchina car)
     do {
     cout << endl;
 		cout << "------------------- MENU' -------------------" << endl;
-		cout << "1 - Cerca auto" << endl
+		cout << "1 - Cerca autoe" << endl
              << "2 - Stampa file" << endl
 		     << "3 - Uscita" << endl << endl
 		     << "Inserire scelta >> ";
@@ -240,7 +265,7 @@ void menu(macchina car)
                 cerca_auto(car);
 				break;
 			case 2:
-                stampa_file();
+
 			    break;
             case 3:
                 cout<<endl<<"Uscita..."<<endl;
