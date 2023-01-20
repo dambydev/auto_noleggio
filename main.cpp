@@ -45,6 +45,21 @@ int seleziona_auto(){
     }
 }
 
+int conta_record()
+{
+    int i=0;
+    string appoggio;
+
+    fstream fin;
+    fin.open("auto.csv",ios::in);
+
+    while(getline(fin,appoggio))
+        (i++);
+
+    fin.close();
+    return i;
+}
+
 void affitta(macchina *car, int id, int x){
     bool pv = false, cg = false;
     int ris = 0, conta_gd = 0;
@@ -173,22 +188,21 @@ void affitta(macchina *car, int id, int x){
         }
 }
 
-void aggiorna_file(macchina *car, int id, int x){
-    ofstream fout("auto.csv", ios::out);
+void aggiorna_file(macchina *car, string original, int id, int x){
     ifstream fin("auto.csv");
-    string line;
-    int c = 0;
-    if(fout.good()){
-            for(int i=0; i<id; i++){
-                getline(fin, line);
-                    if(i == id-1)
-                        fout<<found_car[id][x];
-            }
-    }
-    else
-        cout<<"Errore del file in lettura";
-    fin.close();
+    ofstream fout("temp.csv");
+    string strTemp;
 
+    while(getline(fin, strTemp)){
+        if(strTemp == original)
+        {
+            strTemp = found_car[id];
+        }
+        strTemp += "\n";
+        fout << strTemp;
+    }
+    fout.close();
+    fin.close();
 }
 
 /*
@@ -200,6 +214,7 @@ furgone, Ford, Transit, bianco, A, A, A, A, A, L, L
 lusso, BMW, Serie 5, grigio metallizzato, L, L, L, L, L, A, A
 utilitaria, Peugeot, 108, verde, L, A, L, L, L, A, L
 */
+
 void cerca_auto(macchina car){
     ifstream fin("auto.csv", ios::in);
     if(!fin)
@@ -243,8 +258,9 @@ void cerca_auto(macchina car){
         x+=3;
     }
     x = x-21;
+    string original = found_car[id];
     affitta(&car, id, x);
-    aggiorna_file(&car, id, x);
+    aggiorna_file(&car, original, id, x);
     fin.close();
 }
 
