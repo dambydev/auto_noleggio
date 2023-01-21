@@ -20,13 +20,13 @@ int seleziona_auto(){
     do{
     cout<<endl<<"Inserisci l'id della macchina: ";
     cin>>id;
-    }while(id<0 || id>=c);
+    }while(id<0 || id>c);
 
     char con;
     bool c = false;
     do{
-    cout<<"Hai selezionato "<<found_car[id]<<endl;
-    cout<<"Conferma [C]"<<endl<<"Torna indietro [e]"<<endl<<">>";
+    cout<<endl<<"Hai selezionato: "<<found_car[id]<<endl;
+    cout<<endl<<"Conferma [C]"<<endl<<"Torna indietro [e]"<<endl<<">>";
     cin>>con;
     if(con != 'C'){
         if(con != 'e')
@@ -49,8 +49,9 @@ void affitta(macchina *car, int id, int x){
     bool pv = false, cg = false;
     int ris = 0, conta_gd = 0;
     int gd[7];
-    cout<<"Questi sono i giorni disponibili: "<<endl;
+    cout<<endl<<"Questi sono i giorni disponibili: "<<endl;
     do{
+        cout<<endl;
         for(int i=1; i<8; i++){
             switch(i){
                 case 1:
@@ -94,12 +95,9 @@ void affitta(macchina *car, int id, int x){
         }
 
             if(pv == false){
-                cout<<"Quali giorno/i vuoi affittare?";
+                cout<<endl<<"Quale/i giorno/i vuoi affittare?";
                 pv = true;
             }
-            else
-                cout<<endl;
-
             cout<<endl<<"Inserire 9 per uscire";
             cout<<endl<<">> ";
             cin>>ris;
@@ -166,15 +164,13 @@ void affitta(macchina *car, int id, int x){
             }
         }while(cg == false);
 
-        for(int i=0; i<7; i++)
-        {
+        for(int i=0; i<7; i++){
         found_car[id][x] = car->week[i];
         x+=3;
         }
 }
 
 void aggiorna_file(string *fo){
-    ifstream fin("auto.csv", ifstream::app);
     ofstream fout("auto.csv");
 
     fout<<"";
@@ -185,18 +181,7 @@ void aggiorna_file(string *fo){
         i++;
     }
     fout.close();
-    fin.close();
 }
-
-/*
-utilitaria, FIAT, Panda, rosso, L, L, L, A, A, A, A
-utilitaria, KIA, Pikanto, bronzo, A, A, L, L, L, A, A
-lusso, Mercedes, Classe 5, nero, L, L, L, L, L, A, A
-sportiva, Lamborghini, Huracan, giallo, L, L, L, L, L, L, L
-furgone, Ford, Transit, bianco, A, A, A, A, A, L, L
-lusso, BMW, Serie 5, grigio metallizzato, L, L, L, L, L, A, A
-utilitaria, Peugeot, 108, verde, L, A, L, L, L, A, L
-*/
 
 void copia_file(string fo[]){
     ifstream fin("auto.csv", ios::in);
@@ -213,7 +198,6 @@ void copia_file(string fo[]){
     fin.close();
 }
 
-
 void cerca_auto(macchina car){
     ifstream fin("auto.csv", ios::in);
     if(!fin)
@@ -223,8 +207,9 @@ void cerca_auto(macchina car){
     string cat, app, res;
     char v = ',';
 
-    cout<<"Inserisci la categoria dell'auto: ";
+    cout<<endl<<"Inserisci la categoria dell'auto: ";
     cin>>car.categoria;
+    cout<<endl;
 
     while(!fin.eof()){
         fin>>cat;
@@ -258,22 +243,22 @@ void cerca_auto(macchina car){
     }
     x = x-21;
 
-    string original = found_car[id];
+    string original = found_car[id]+'\n';
+
     affitta(&car, id, x);
+
     string fo[200];
     copia_file(fo);
 
     bool b = false;
     int i = 0;
-
     while(b != true){
         if(fo[i] == original){
             b = true;
-            fo[i] = found_car[id];
+            fo[i] = found_car[id] + '\n';
         }
         i++;
     }
-    fo[id] = found_car[id] + '\n';
     aggiorna_file(fo);
     fin.close();
 }
@@ -283,11 +268,22 @@ void stampa_file(){
     if(!fin)
         cout<<"Errore di apertura del file";
     string l;
+    cout<<endl;
     while(!fin.eof()){
         getline(fin, l);
         cout<<l<<endl;
     }
 }
+
+/*
+utilitaria, FIAT, Panda, rosso, L, L, L, A, A, A, A
+utilitaria, KIA, Pikanto, bronzo, A, A, L, L, L, A, A
+lusso, Mercedes, Classe 5, nero, L, L, L, L, L, A, A
+sportiva, Lamborghini, Huracan, giallo, L, L, L, L, L, L, L
+furgone, Ford, Transit, bianco, A, A, A, A, A, L, L
+lusso, BMW, Serie 5, grigio metallizzato, L, L, L, L, L, A, A
+utilitaria, Peugeot, 108, verde, L, A, L, L, L, A, L
+*/
 
 void menu(macchina car)
 {
