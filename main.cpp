@@ -45,21 +45,6 @@ int seleziona_auto(){
     }
 }
 
-int conta_record()
-{
-    int i=0;
-    string appoggio;
-
-    fstream fin;
-    fin.open("auto.csv",ios::in);
-
-    while(getline(fin,appoggio))
-        (i++);
-
-    fin.close();
-    return i;
-}
-
 void affitta(macchina *car, int id, int x){
     bool pv = false, cg = false;
     int ris = 0, conta_gd = 0;
@@ -188,18 +173,16 @@ void affitta(macchina *car, int id, int x){
         }
 }
 
-void aggiorna_file(macchina *car, string original, int id, int x){
-    ifstream fin("auto.csv");
-    ofstream fout("temp.csv");
-    string strTemp;
+void aggiorna_file(string *fo){
+    ifstream fin("auto.csv", ifstream::app);
+    ofstream fout("auto.csv");
 
-    while(getline(fin, strTemp)){
-        if(strTemp == original)
-        {
-            strTemp = found_car[id];
-        }
-        strTemp += "\n";
-        fout << strTemp;
+    fout<<"";
+
+    int i = 0;
+    while(fo[i] != ""){
+        fout<<fo[i];
+        i++;
     }
     fout.close();
     fin.close();
@@ -215,10 +198,26 @@ lusso, BMW, Serie 5, grigio metallizzato, L, L, L, L, L, A, A
 utilitaria, Peugeot, 108, verde, L, A, L, L, L, A, L
 */
 
+void copia_file(string fo[]){
+    ifstream fin("auto.csv", ios::in);
+    if(!fin)
+        cout<<"Errore di apertura del file";
+
+    int i = 0;
+
+    while(!fin.eof()){
+        getline(fin, fo[i]);
+        fo[i] = fo[i] + '\n';
+        i++;
+    }
+    fin.close();
+}
+
+
 void cerca_auto(macchina car){
     ifstream fin("auto.csv", ios::in);
     if(!fin)
-    cout<<"Errore di apertura del file";
+        cout<<"Errore di apertura del file";
 
     c = 0;
     string cat, app, res;
@@ -258,10 +257,36 @@ void cerca_auto(macchina car){
         x+=3;
     }
     x = x-21;
+
     string original = found_car[id];
     affitta(&car, id, x);
-    aggiorna_file(&car, original, id, x);
+    string fo[200];
+    copia_file(fo);
+
+    bool b = false;
+    int i = 0;
+
+    while(b != true){
+        if(fo[i] == original){
+            b = true;
+            fo[i] = found_car[id];
+        }
+        i++;
+    }
+    fo[id] = found_car[id] + '\n';
+    aggiorna_file(fo);
     fin.close();
+}
+
+void stampa_file(){
+    ifstream fin("auto.csv", ios::in);
+    if(!fin)
+        cout<<"Errore di apertura del file";
+    string l;
+    while(!fin.eof()){
+        getline(fin, l);
+        cout<<l<<endl;
+    }
 }
 
 void menu(macchina car)
@@ -270,7 +295,7 @@ void menu(macchina car)
     do {
     cout << endl;
 		cout << "------------------- MENU' -------------------" << endl;
-		cout << "1 - Cerca autoe" << endl
+		cout << "1 - Cerca auto" << endl
              << "2 - Stampa file" << endl
 		     << "3 - Uscita" << endl << endl
 		     << "Inserire scelta >> ";
@@ -281,7 +306,7 @@ void menu(macchina car)
                 cerca_auto(car);
 				break;
 			case 2:
-
+			    stampa_file();
 			    break;
             case 3:
                 cout<<endl<<"Uscita..."<<endl;
