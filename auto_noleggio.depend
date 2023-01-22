@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1674409653 source:c:\users\david\desktop\scuola\tpsit\c++ tpsit\auto_noleggio\main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<algorithm>
+
