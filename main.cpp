@@ -63,10 +63,14 @@ void cerca_auto(){
 
     stampa_file();
     cout<<endl<<"Questa e' la lista della auto"<<endl;
+    cout<<endl<<"Inserire la categoria dell'auto e i/il giorni/o della settimana che si vuole prenotare"<<endl
+    <<"1 = lunedi', 2 = martedi', 3 = mercoledi', 4 = giovedi', 5 = venerdi'; 6 = sabato; 7 = domenica"<<endl<<endl
+    <<"Ricorda se vuoi prenotare piu' di un giorno, bisogna intervallarli con un spazio. Esempio: 'lusso 4 5'";
+
 
     string ca, sett;
 
-    cout<<" >> ";
+    cout<<endl<<endl<<" >> ";
     cin.ignore();
     getline(cin, prova);
     stringstream ss(prova);
@@ -79,6 +83,17 @@ void cerca_auto(){
             sett += word;
         }
         i++;
+    }
+
+    if(sett == ""){
+        cout<<endl<<"Bisogna inserire anche il giorno oltre alla categoria!"<<endl;
+        return;
+    }
+    for(int i=0; i<sett.length();i++){
+        if(sett[i]=='0' || sett[i]=='8' || sett[i]=='9'){
+            cout<<endl<<"Hai inserito un giorno della settimana sbagliato"<<endl;
+            return;
+        }
     }
 
      bool setti[]={false,false,false,false,false,false,false};
@@ -171,17 +186,42 @@ void cerca_auto(){
         }
     }
 
-    cout<<endl<<"Queste sono le macchina disponibili"<<endl;
-
     if(md>0){
+        int ms = 0;
+        cout<<endl<<"Queste sono le macchina disponibili"<<endl;
         for(int i=0; i<contato; i++){
-            if(mac[i].d==true)
+            if(mac[i].d==true){
                 cout<<"["<<i<<"]"<<"  "<<mac[i].marca<<" "<<mac[i].modello<<" "<<mac[i].colore<<endl;
+                ms++;
+            }
         }
-
+        char risp;
+        bool cris=false;
         int id;
-        cout<<endl<<"Quale vuoi selezionare? >> ";
-        cin>>id;
+        if(ms != 1){
+            do{
+            cout<<endl<<"Questa sono le auto disponobili, vuoi continuare con la prenotazione? (s/n)"<<endl;
+            cout<<" >> ";
+            cin>>risp;
+            if(risp == 'n')
+                return;
+                else if(risp != 's')
+                    cris = true;
+            }while(cris == true);
+            cout<<endl<<"Quale vuoi selezionare? >> ";
+            cin>>id;
+        }
+        else{
+            do{
+            cout<<endl<<"Questa e' l'unica auto disponobile, vuoi confermare la prenotazione? (s/n)"<<endl;
+            cout<<" >> ";
+            cin>>risp;
+            if(risp == 'n')
+                return;
+                else if(risp != 's')
+                    cris = true;
+            }while(cris == true);
+        }
 
         string riga_og = mac[id].categoria+','+mac[id].marca+','+mac[id].modello+','+mac[id].colore+',';
 
@@ -220,24 +260,15 @@ void cerca_auto(){
             ll++;
         }
     aggiorna_file(fo);
+    cout<<endl<<"Prenotazione avvenuta con successo!"<<endl;
     cout<<endl<<"Lista aggiornata"<<endl;
     stampa_file();
     }
     else{
-        cout<<"Non ci sono auto disponibili al momento"<<endl;
+        cout<<endl<<"Non ci sono auto disponibili al momento"<<endl;
     }
     fin.close();
 }
-
-/*
-utilitaria, FIAT, Panda, rosso, L, L, L, A, A, A, A
-utilitaria, KIA, Pikanto, bronzo, A, A, L, L, L, A, A
-lusso, Mercedes, Classe 5, nero, L, L, L, L, L, A, A
-sportiva, Lamborghini, Huracan, giallo, L, L, L, L, L, L, L
-furgone, Ford, Transit, bianco, A, A, A, A, A, L, L
-lusso, BMW, Serie 5, grigio metallizzato, L, L, L, L, L, A, A
-utilitaria, Peugeot, 108, verde, L, A, L, L, L, A, L
-*/
 
 void menu()
 {
