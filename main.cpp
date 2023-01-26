@@ -207,6 +207,8 @@ void cerca_auto(){
                 return;
                 else if(risp != 's')
                     cris = true;
+                else
+                    cris = false;
             }while(cris == true);
             cout<<endl<<"Quale vuoi selezionare? >> ";
             cin>>id;
@@ -220,6 +222,8 @@ void cerca_auto(){
                 return;
                 else if(risp != 's')
                     cris = true;
+                else
+                    cris = false;
             }while(cris == true);
         }
 
